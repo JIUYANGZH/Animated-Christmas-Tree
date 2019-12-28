@@ -2,11 +2,10 @@ import threading
 import random
 import os
 import time
-import msvcrt
 
 
 tree = list(open('tree.txt').read().rstrip())
-
+mutex = threading.Lock()
 print(''.join(tree))
 yellow = []
 blue = []
@@ -30,10 +29,12 @@ def lights(color,index):
     while True:
         for idx in index:
             tree[idx] = colored_dot(color) if off else '◙'
+        mutex.acquire()
         os.system('cls' if os.name == 'nt' else 'clear')
         print(''.join(tree))
         off = not off
         time.sleep(random.uniform(0.5,1.5))
+        mutex.release()
 
     pass
 
